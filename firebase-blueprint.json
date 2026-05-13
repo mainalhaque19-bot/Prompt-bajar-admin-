@@ -1,0 +1,53 @@
+{
+  "entities": {
+    "Prompt": {
+      "title": "Prompt",
+      "description": "An AI image generation prompt with metadata",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the prompt" },
+        "prompt": { "type": "string", "description": "The actual AI generation prompt" },
+        "imageUrl": { "type": "string", "format": "uri", "description": "URL to the generated image" },
+        "category": { "type": "string", "description": "The category name (must exist in categories collection)" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "likesCount": { "type": "number" },
+        "viewsCount": { "type": "number" },
+        "copiesCount": { "type": "number" }
+      },
+      "required": ["title", "prompt", "imageUrl", "category", "createdAt", "likesCount", "viewsCount", "copiesCount"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "A prompt category",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "User with administrative access",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "prompts": {
+      "schema": "Prompt",
+      "description": "Collection of image prompts"
+    },
+    "categories": {
+      "schema": "Category",
+      "description": "Collection of dynamic categories"
+    },
+    "admins": {
+      "schema": "Admin",
+      "description": "Collection of authorized admin emails"
+    }
+  }
+}
