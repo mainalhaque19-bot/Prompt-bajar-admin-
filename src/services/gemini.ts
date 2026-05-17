@@ -1,10 +1,16 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let ai: GoogleGenAI | null = null;
+function getAi() {
+  if (!ai) {
+    ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || 'dummy_key' });
+  }
+  return ai;
+}
 
 export async function suggestCategory(promptText: string): Promise<string> {
   try {
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Suggest the best category for this AI image prompt: "${promptText}". Categories are: Trending, Fantasy, Cyberpunk, Nature, Anime, Realistic, Abstract. Return ONLY the category name.`,
       config: {
