@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { auth, loginWithGoogle, logout, db, doc, getDoc, collection, handleFirestoreError, OperationType } from './firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User, getRedirectResult } from 'firebase/auth';
 import AdminLayout from './components/AdminLayout';
 import Dashboard from './components/Dashboard';
 import PromptList from './components/PromptList';
@@ -29,6 +29,20 @@ export default function App() {
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+      } catch (error: any) {
+        if (error.code === 'auth/unauthorized-domain') {
+          const domain = window.location.hostname;
+          setAuthError(`Unauthorized domain: ${domain}. Please add this domain to authorized domains in Firebase Console.`);
+        } else {
+          setAuthError(error.message || "Failed to login on redirect");
+        }
+      }
+    };
+    checkRedirect();
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
@@ -59,7 +73,12 @@ export default function App() {
       setAuthError(null);
       await loginWithGoogle();
     } catch (error: any) {
-      setAuthError(error.message || "Failed to login");
+      if (error.code === 'auth/unauthorized-domain') {
+        const domain = window.location.hostname;
+        setAuthError(`Unauthorized domain: ${domain}. Please add this domain to authorized domains in Firebase Console -> Authentication -> Settings -> Authorized domains.`);
+      } else {
+        setAuthError(error.message || "Failed to login");
+      }
     }
   };
 

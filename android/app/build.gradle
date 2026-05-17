@@ -4,7 +4,7 @@ android {
     namespace = "com.promptbajar.app"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.promptbajar.app"
+        applicationId "com.promptbajar.admin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
