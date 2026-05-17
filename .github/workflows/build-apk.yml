@@ -34,6 +34,11 @@ jobs:
       - name: Build Web App
         run: npm run build
 
+      - name: Recreate Android Directory
+        run: |
+          rm -rf android
+          npx cap add android
+
       - name: Sync Capacitor Android
         run: npx cap sync android
 
