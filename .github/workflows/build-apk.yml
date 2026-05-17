@@ -39,6 +39,9 @@ jobs:
           rm -rf android
           npx cap add android
 
+      - name: Generate Capacitor Assets
+        run: npx @capacitor/assets generate --android
+
       - name: Sync Capacitor Android
         run: npx cap sync android
 
